@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso a Aplicaciones - Oficinas Técnicas BOE</title>
+	<style>
+    /* --- Estilos Generales --- */
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background-color: #f9f9f9;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Centra horizontalmente */
+        justify-content: flex-start; /* Alinea el contenido arriba */
+        min-height: 100vh;
+        padding-top: 5vh; /* Añade un margen superior del 5% de la altura de la pantalla */
+        gap: 50px; /* Espacio entre la cabecera y los iconos */
+        box-sizing: border-box; /* Asegura que el padding no afecte al tamaño total */
+    }
+
+	/* --- Cabecera --- */
+	.header {
+		padding: 20px 30px;
+		flex-shrink: 0;
+    
+		/* --- INICIO DE CAMBIOS --- */
+		width: 600px;     /* Ancho base del contenedor del logo */
+		max-width: 90%;   /* En pantallas pequeñas, no ocupará más del 90% del ancho */
+		box-sizing: border-box;
+		/* --- FIN DE CAMBIOS --- */
+	}
+
+	.header img {
+		display: block;
+
+		/* --- INICIO DE CAMBIOS --- */
+		width: 100%;      /* La imagen ocupa todo el ancho de su contenedor (.header) */
+		height: auto;     /* La altura se ajusta automáticamente para mantener la proporción */
+		max-width: 100%;  /* Buena práctica para asegurar que la imagen no se desborde */
+		/* --- FIN DE CAMBIOS --- */
+	}
+
+    /* --- Contenedor de Aplicaciones --- */
+    .app-container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 80px;
+        flex-wrap: wrap; /* Permite que los iconos bajen de línea si no hay espacio */
+        padding: 0 20px; /* Añade un poco de espacio lateral para que no se pegue a los bordes */
+    }
+
+    /* --- Estilo para cada Aplicación --- */
+    .app-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-decoration: none;
+        color: #333;
+        width: 150px;
+        transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+    }
+
+    .app-item:hover {
+        transform: scale(1.05);
+        color: #007bff;
+    }
+
+    .app-item img {
+        height: 80px;
+        margin-bottom: 15px;
+    }
+
+    .app-item span {
+        font-size: 16px;
+        text-align: center;
+    }
+
+    /* --- REGLA RESPONSIVE PARA MÓVILES --- */
+    @media (max-width: 600px) {
+        body {
+            padding-top: 5vh;
+            gap: 40px; /* Reduce el espacio en pantallas pequeñas */
+        }
+        .app-container {
+            flex-direction: column; /* Apila los iconos verticalmente */
+            gap: 40px; /* Ajusta el espacio vertical entre iconos */
+            align-items: center; /* Centra los iconos apilados */
+        }
+    }
+</style>
+</head>
+<body>
+
+    <header class="header">
+        <img src="img/logo.png" alt="Logo Boletín Oficial del Estado y Oficinas Técnicas">
+    </header>
+
+    <main>
+        <nav class="app-container">
+            <a href="https://ruimanju.github.io/Imprenta_BOE_Calculadora_Lomos/" target="_blank" class="app-item">
+                <img src="img/Lomo.png" alt="Icono de Cálculo de grosor de lomo">
+                <span>Cálculo de grosor de lomo</span>
+            </a>
+
+            <a href="https://ruimanju.github.io/Imprenta_BOE_Pict_Review/" target="_blank" class="app-item">
+                <img src="img/Imagenes.png" alt="Icono de Revisión de imágenes">
+                <span>Revisión de imágenes</span>
+            </a>
+
+            <a href="file:///Q:/Ofic_Tecnicas_y_Rel_clientes/Oficina_tecnica/Apps_OOTT/Mochila%20ecol%C3%B3gica%20publicaciones/Calculadora_Mochila_Ecologica_PublicacionesBOE_v1.xlsm" class="app-item">
+                <img src="img/Mochila ecologica.png" alt="Icono de Mochila ecológica">
+                <span>Mochila ecológica</span>
+            </a>
+        </nav>
+    </main>
+
+</body>
+</html>
