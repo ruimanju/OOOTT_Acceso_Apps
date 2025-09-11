@@ -51,10 +51,11 @@
     .app-container {
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        /* Alinear los .app-item por su parte superior para que no haya saltos */
+        align-items: flex-start; 
         gap: 80px;
-        flex-wrap: wrap; /* Permite que los iconos bajen de línea si no hay espacio */
-        padding: 0 20px; /* Añade un poco de espacio lateral para que no se pegue a los bordes */
+        flex-wrap: wrap;
+        padding: 0 20px;
     }
 
     /* --- Estilo para cada Aplicación --- */
@@ -74,10 +75,58 @@
         color: #007bff;
     }
 
-    .app-item img {
-        height: 80px;
-        margin-bottom: 15px;
+    /* ---- NUEVOS ESTILOS ---- */
+
+    /* 1. Contenedor del icono con altura fija */
+    .icon-wrapper {
+        display: flex;
+        /* Alinea el icono (su hijo) a la parte inferior */
+        align-items: flex-end; 
+        justify-content: center;
+        /* Altura fija para todos los contenedores (igual a la del icono más alto) */
+        height: 90px; 
     }
+
+    /* 2. Reglas de altura para cada icono */
+    .app-item img {
+        height: 80px; /* Tamaño para los iconos sin clase específica */
+    }
+
+    .app-item .icon-mochila {
+        height: 90px;
+    }
+
+    .app-item .icon-renombrar {
+        height: 70px;
+    }
+
+    /* 3. Estilo del texto */
+    .app-item span {
+        font-size: 16px;
+        text-align: center;
+        /* Espacio superior para separarlo del bloque de iconos */
+        margin-top: 15px; 
+    }
+
+    /* Estilo general para las imágenes de los iconos */
+    .app-item img {
+        margin-bottom: 10px; /* Espacio por defecto entre icono y texto */
+        /* height ya no se define aquí globalmente, sino en los selectores específicos */
+    }
+    
+    /* Ajustes específicos de altura y margen para los iconos */
+    .app-item img:not(.icon-mochila):not(.icon-renombrar) {
+        height: 80px; /* Tamaño para Lomo y Revisión de imágenes */
+    }
+
+    .app-item .icon-mochila {
+        height: 90px; /* Mochila un poco más grande */
+    }
+
+    .app-item .icon-renombrar {
+        height: 70px; /* Renombrar un poco más pequeño */
+    }
+
 
     .app-item span {
         font-size: 16px;
@@ -130,22 +179,30 @@
     <main>
         <nav class="app-container">
             <a href="https://ruimanju.github.io/Imprenta_BOE_Calculadora_Lomos/" target="_blank" class="app-item">
-                <img src="img/Lomo.png" alt="Icono de Cálculo de grosor de lomo">
+                <div class="icon-wrapper">
+                    <img src="img/Lomo.png" alt="Icono de Cálculo de grosor de lomo">
+                </div>
                 <span>Cálculo de lomo</span>
             </a>
 
             <a href="https://ruimanju.github.io/Imprenta_BOE_Pict_Review/" target="_blank" class="app-item">
-                <img src="img/Imagenes.png" alt="Icono de Revisión de imágenes">
+                <div class="icon-wrapper">
+                    <img src="img/Imagenes.png" alt="Icono de Revisión de imágenes">
+                </div>
                 <span>Revisión de imágenes</span>
             </a>
 
             <a id="mochilaBtn" class="app-item">
-                <img src="img/Mochila ecologica.png" alt="Icono de Mochila ecológica">
+                <div class="icon-wrapper">
+                    <img src="img/Mochila ecologica.png" alt="Icono de Mochila ecológica" class="icon-mochila">
+                </div>
                 <span>Mochila ecológica</span>
             </a>
 
             <a id="renombrarBtn" class="app-item">
-                <img src="img/Renombrar archivos.png" alt="Icono de Renombrar archivos">
+                <div class="icon-wrapper">
+                    <img src="img/Renombrar archivos.png" alt="Icono de Renombrar archivos" class="icon-renombrar">
+                </div>
                 <span>Renombrar / acortar<br>nombres de archivos</span>
             </a>
         </nav>
@@ -165,60 +222,33 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Renombrar / Acortar Nombres de Archivos</h2>
-            <p>Esta herramienta permite renombrar archivos con caracteres "raros", así como acortar los nombres demasiado largos.</p>
+            <p>Esta herramienta permite renombrar archivos con codificación de caracteres extraña, así como acortar los nombres de archivo demasiado largos.</p>
             <p>Se trata de una aplicación de PowerShell de Windows que no se puede ejecutar desde aquí.</p>
             <p>Para hacerlo abrir el directorio <i>Q:\Ofic_Tecnicas_y_Rel_clientes\Oficina_tecnica\Apps_OOTT\Renombrar_archivos</i> y ejecutar <b><i>Lanzar_App.bat</i></b></p>
-            <p>Puede dar error por tratarse de un script externo a Windows; para autorizar su ejecución se ha de abrir la aplicación PowerShell en Windows y ejecutar este código (solo hace falta hacerlo la primera vez):</p>
+            <p>Puede dar error por tratarse de un script externo a Windows, para autorizar su ejecución se ha de abrir la aplicación PowerShell en Windows y ejecutar este código (solo hace falta hacerlo la primera vez):</p>
             <p><span style="color:red; font-family: monospace; background-color: #f0f0f0; padding: 2px 5px; border-radius: 4px;">Set-ExecutionPolicy RemoteSigned -Scope Process</span></p>
         </div>
     </div>
     
-<script>
-    // --- Lógica para las ventanas modales ---
-
-    // Obtener los elementos de las modales
-    const mochilaModal = document.getElementById("mochilaModal");
-    const renombrarModal = document.getElementById("renombrarModal");
-
-    // Obtener los botones que abren las modales
-    const mochilaBtn = document.getElementById("mochilaBtn");
-    const renombrarBtn = document.getElementById("renombrarBtn");
-
-    // Obtener los elementos <span> que cierran las modales
-    const closeButtons = document.getElementsByClassName("close");
-
-    // Función para abrir una modal
-    const openModal = (modal) => {
-        modal.style.display = "block";
-    };
-
-    // Función para cerrar una modal
-    const closeModal = (modal) => {
-        modal.style.display = "none";
-    };
-
-    // Asignar eventos a los botones de apertura
-    mochilaBtn.onclick = () => openModal(mochilaModal);
-    renombrarBtn.onclick = () => openModal(renombrarModal);
-
-    // Asignar eventos a los botones de cierre
-    for (let i = 0; i < closeButtons.length; i++) {
-        closeButtons[i].onclick = function() {
-            closeModal(this.parentElement.parentElement);
+    <script>
+        // Script (sin cambios)
+        const mochilaModal = document.getElementById("mochilaModal");
+        const renombrarModal = document.getElementById("renombrarModal");
+        const mochilaBtn = document.getElementById("mochilaBtn");
+        const renombrarBtn = document.getElementById("renombrarBtn");
+        const closeButtons = document.getElementsByClassName("close");
+        const openModal = (modal) => { modal.style.display = "block"; };
+        const closeModal = (modal) => { modal.style.display = "none"; };
+        mochilaBtn.onclick = () => openModal(mochilaModal);
+        renombrarBtn.onclick = () => openModal(renombrarModal);
+        for (let i = 0; i < closeButtons.length; i++) {
+            closeButtons[i].onclick = function() { closeModal(this.parentElement.parentElement); }
         }
-    }
-
-    // Cerrar la modal si el usuario hace clic fuera del contenido
-    window.onclick = function(event) {
-        if (event.target == mochilaModal) {
-            closeModal(mochilaModal);
+        window.onclick = function(event) {
+            if (event.target == mochilaModal) { closeModal(mochilaModal); }
+            if (event.target == renombrarModal) { closeModal(renombrarModal); }
         }
-        if (event.target == renombrarModal) {
-            closeModal(renombrarModal);
-        }
-    }
-</script>
+    </script>
 
 </body>
 </html>
-
