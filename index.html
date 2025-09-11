@@ -66,6 +66,7 @@
         color: #333;
         width: 150px;
         transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
+        cursor: pointer;
     }
 
     .app-item:hover {
@@ -81,6 +82,29 @@
     .app-item span {
         font-size: 16px;
         text-align: center;
+    }
+
+    /* --- ESTILOS PARA VENTANAS EMERGENTES (MODAL) --- */
+    .modal { 
+        display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%;
+        overflow: auto; background-color: rgba(0,0,0,0.4); padding-top: 60px; 
+    }
+    .modal-content { 
+        background-color: #fefefe; margin: 5% auto; padding: 30px; border: 1px solid #888;
+        width: 80%; max-width: 600px; border-radius: 10px; position: relative; 
+        line-height: 1.6;
+    }
+    .modal-content h2 { 
+        color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 1.5rem; 
+    }
+    .modal-content p {
+        margin-bottom: 15px;
+    }
+    .close { 
+        color: #aaa; float: right; font-size: 28px; font-weight: bold; 
+    }
+    .close:hover, .close:focus { 
+        color: black; text-decoration: none; cursor: pointer; 
     }
 
     /* --- REGLA RESPONSIVE PARA MÓVILES --- */
@@ -105,26 +129,95 @@
 
     <main>
         <nav class="app-container">
-            <a href="https://ruimanju.github.io/Imprenta_BOE_Calculadora_Lomos/" target="_blank" class="app-item">
+            <a href="file:///Q:/Ofic_Tecnicas_y_Rel_clientes/Oficina_tecnica/Apps_OOTT/Calculo_Lomo/calculadora_lomo_v3.html" target="_blank" class="app-item">
                 <img src="img/Lomo.png" alt="Icono de Cálculo de grosor de lomo">
                 <span>Cálculo de lomo</span>
             </a>
 
-            <a href="https://ruimanju.github.io/Imprenta_BOE_Pict_Review/" target="_blank" class="app-item">
+            <a href="file:///Q:/Ofic_Tecnicas_y_Rel_clientes/Oficina_tecnica/Apps_OOTT/Revision_Imagenes/03/index_v3_12.html" target="_blank" class="app-item">
                 <img src="img/Imagenes.png" alt="Icono de Revisión de imágenes">
                 <span>Revisión de imágenes</span>
             </a>
 
-            <a href="file:///Q:/Ofic_Tecnicas_y_Rel_clientes/Oficina_tecnica/Apps_OOTT/Mochila%20ecol%C3%B3gica%20publicaciones/" class="app-item">
+            <a id="mochilaBtn" class="app-item">
                 <img src="img/Mochila ecologica.png" alt="Icono de Mochila ecológica">
                 <span>Mochila ecológica</span>
-				<span>(en proceso)</span>
+            </a>
+
+            <a id="renombrarBtn" class="app-item">
+                <img src="img/Renombrar archivos.png" alt="Icono de Renombrar archivos">
+                <span>Renombrar / acortar<br>nombres de archivos</span>
             </a>
         </nav>
     </main>
 
+    <div id="mochilaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Mochila Ecológica</h2>
+            <p>Esta herramienta sirve para hacer el cálculo de la mochila ecológica de las publicaciones, y está en proceso de construcción.</p>
+            <p>Por el momento está implementada en Excel, y no se puede ejecutar desde aquí.</p>
+            <p>Para hacerlo abrir el directorio <i>Q:\Ofic_Tecnicas_y_Rel_clientes\Oficina_tecnica\Apps_OOTT\Mochila ecológica publicaciones</i> y abrir <b><i>Calculadora_Mochila_Ecologica_PublicacionesBOE_v1.xlsm</i></b></p>
+        </div>
+    </div>
+
+    <div id="renombrarModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Renombrar / Acortar Nombres de Archivos</h2>
+            <p>Esta herramienta permite renombrar archivos con caracteres "raros", así como acortar los nombres demasiado largos.</p>
+            <p>Se trata de una aplicación de PowerShell de Windows que no se puede ejecutar desde aquí.</p>
+            <p>Para hacerlo abrir el directorio <i>Q:\Ofic_Tecnicas_y_Rel_clientes\Oficina_tecnica\Apps_OOTT\Renombrar_archivos</i> y ejecutar <b><i>Lanzar_App.bat</i></b></p>
+            <p>Puede dar error por tratarse de un script externo a Windows; para autorizar su ejecución se ha de abrir la aplicación PowerShell en Windows y ejecutar este código (solo hace falta hacerlo la primera vez):</p>
+            <p><span style="color:red; font-family: monospace; background-color: #f0f0f0; padding: 2px 5px; border-radius: 4px;">Set-ExecutionPolicy RemoteSigned -Scope Process</span></p>
+        </div>
+    </div>
+    
+<script>
+    // --- Lógica para las ventanas modales ---
+
+    // Obtener los elementos de las modales
+    const mochilaModal = document.getElementById("mochilaModal");
+    const renombrarModal = document.getElementById("renombrarModal");
+
+    // Obtener los botones que abren las modales
+    const mochilaBtn = document.getElementById("mochilaBtn");
+    const renombrarBtn = document.getElementById("renombrarBtn");
+
+    // Obtener los elementos <span> que cierran las modales
+    const closeButtons = document.getElementsByClassName("close");
+
+    // Función para abrir una modal
+    const openModal = (modal) => {
+        modal.style.display = "block";
+    };
+
+    // Función para cerrar una modal
+    const closeModal = (modal) => {
+        modal.style.display = "none";
+    };
+
+    // Asignar eventos a los botones de apertura
+    mochilaBtn.onclick = () => openModal(mochilaModal);
+    renombrarBtn.onclick = () => openModal(renombrarModal);
+
+    // Asignar eventos a los botones de cierre
+    for (let i = 0; i < closeButtons.length; i++) {
+        closeButtons[i].onclick = function() {
+            closeModal(this.parentElement.parentElement);
+        }
+    }
+
+    // Cerrar la modal si el usuario hace clic fuera del contenido
+    window.onclick = function(event) {
+        if (event.target == mochilaModal) {
+            closeModal(mochilaModal);
+        }
+        if (event.target == renombrarModal) {
+            closeModal(renombrarModal);
+        }
+    }
+</script>
+
 </body>
-
 </html>
-
-
