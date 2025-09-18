@@ -29,29 +29,22 @@
 	.header {
 		padding: 20px 30px;
 		flex-shrink: 0;
-    
-		/* --- INICIO DE CAMBIOS --- */
 		width: 600px;     /* Ancho base del contenedor del logo */
 		max-width: 90%;   /* En pantallas pequeñas, no ocupará más del 90% del ancho */
 		box-sizing: border-box;
-		/* --- FIN DE CAMBIOS --- */
 	}
 
 	.header img {
 		display: block;
-
-		/* --- INICIO DE CAMBIOS --- */
 		width: 100%;      /* La imagen ocupa todo el ancho de su contenedor (.header) */
 		height: auto;     /* La altura se ajusta automáticamente para mantener la proporción */
 		max-width: 100%;  /* Buena práctica para asegurar que la imagen no se desborde */
-		/* --- FIN DE CAMBIOS --- */
 	}
 
     /* --- Contenedor de Aplicaciones --- */
     .app-container {
         display: flex;
         justify-content: center;
-        /* Alinear los .app-item por su parte superior para que no haya saltos */
         align-items: flex-start; 
         gap: 80px;
         flex-wrap: wrap;
@@ -75,21 +68,15 @@
         color: #007bff;
     }
 
-    /* ---- NUEVOS ESTILOS ---- */
-
-    /* 1. Contenedor del icono con altura fija */
     .icon-wrapper {
         display: flex;
-        /* Alinea el icono (su hijo) a la parte inferior */
         align-items: flex-end; 
         justify-content: center;
-        /* Altura fija para todos los contenedores (igual a la del icono más alto) */
         height: 90px; 
     }
 
-    /* 2. Reglas de altura para cada icono */
     .app-item img {
-        height: 80px; /* Tamaño para los iconos sin clase específica */
+        height: 80px;
     }
 
     .app-item .icon-mochila {
@@ -100,37 +87,10 @@
         height: 70px;
     }
 
-    /* 3. Estilo del texto */
     .app-item span {
         font-size: 16px;
         text-align: center;
-        /* Espacio superior para separarlo del bloque de iconos */
         margin-top: 15px; 
-    }
-
-    /* Estilo general para las imágenes de los iconos */
-    .app-item img {
-        margin-bottom: 10px; /* Espacio por defecto entre icono y texto */
-        /* height ya no se define aquí globalmente, sino en los selectores específicos */
-    }
-    
-    /* Ajustes específicos de altura y margen para los iconos */
-    .app-item img:not(.icon-mochila):not(.icon-renombrar) {
-        height: 80px; /* Tamaño para Lomo y Revisión de imágenes */
-    }
-
-    .app-item .icon-mochila {
-        height: 90px; /* Mochila un poco más grande */
-    }
-
-    .app-item .icon-renombrar {
-        height: 70px; /* Renombrar un poco más pequeño */
-    }
-
-
-    .app-item span {
-        font-size: 16px;
-        text-align: center;
     }
 
     /* --- ESTILOS PARA VENTANAS EMERGENTES (MODAL) --- */
@@ -146,8 +106,11 @@
     .modal-content h2 { 
         color: #2c3e50; margin-top: 0; margin-bottom: 15px; font-size: 1.5rem; 
     }
-    .modal-content p {
+    .modal-content p, .modal-content ul {
         margin-bottom: 15px;
+    }
+    .modal-content ul {
+        padding-left: 20px;
     }
     .close { 
         color: #aaa; float: right; font-size: 28px; font-weight: bold; 
@@ -155,17 +118,37 @@
     .close:hover, .close:focus { 
         color: black; text-decoration: none; cursor: pointer; 
     }
+    
+    .code-highlight {
+        font-weight: bold;
+        color: red;
+    }
+
+    .modal-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    .modal-content th, .modal-content td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .modal-content th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
 
     /* --- REGLA RESPONSIVE PARA MÓVILES --- */
     @media (max-width: 600px) {
         body {
             padding-top: 5vh;
-            gap: 40px; /* Reduce el espacio en pantallas pequeñas */
+            gap: 40px;
         }
         .app-container {
-            flex-direction: column; /* Apila los iconos verticalmente */
-            gap: 40px; /* Ajusta el espacio vertical entre iconos */
-            align-items: center; /* Centra los iconos apilados */
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
         }
     }
 </style>
@@ -205,9 +188,16 @@
                 </div>
                 <span>Renombrar / acortar<br>nombres de archivos</span>
             </a>
+
+            <a id="etiquetaBtn" class="app-item">
+                <div class="icon-wrapper">
+                    <img src="img/etiqueta.png" alt="Icono de Etiquetas de paso a Producción">
+                </div>
+                <span>Etiquetas de paso<br>a Producción</span>
+            </a>
         </nav>
     </main>
-
+    
     <div id="mochilaModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -229,24 +219,85 @@
             <p><span style="color:red; font-family: monospace; background-color: #f0f0f0; padding: 2px 5px; border-radius: 4px;">Set-ExecutionPolicy RemoteSigned -Scope Process</span></p>
         </div>
     </div>
+
+    <div id="etiquetaModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Generar etiquetas de paso a Producción</h2>
+            <p>Para generar una etiqueta de paso a Producción de forma rápida: introducir en la barra de direcciones la siguiente estructura:</p>
+            <p style="font-family: monospace; background-color: #f0f0f0; padding: 10px; border-radius: 4px; word-break: break-all;">
+                https://intraboe.boe.es/cain/etiqueta_hr.php?hr=<span class="code-highlight">20XX-XXXX</span>&seccion=<span class="code-highlight">YYYYY</span>&tx_estado=
+            </p>
+            <ul>
+                <li>Sustituir <span class="code-highlight">20XX-XXXX</span> por la HR correspondiente.</li>
+                <li>Sustituir <span class="code-highlight">YYYYY</span> por el código de la Sección o Unidad correspondiente, según la siguiente tabla:</li>
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cód</th>
+                        <th>Unidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>20</td><td>Imprenta Nacional</td></tr>
+                    <tr><td>2010</td><td>Producción</td></tr>
+                    <tr><td>201001</td><td>Unidad de Tratamiento Digital de la Información</td></tr>
+                    <tr><td>201002</td><td>Preimpresión</td></tr>
+                    <tr><td>201003</td><td>Unidad de Producción Digital y Acabados</td></tr>
+                    <tr><td>201004</td><td>Digitalización</td></tr>
+                    <tr><td>201006</td><td>Unidad de Encuadernación Artesanal</td></tr>
+                    <tr><td>201010</td><td>Edición Electrónica</td></tr>
+                    <tr><td>201011</td><td>Producción Digital</td></tr>
+                    <tr><td>2020</td><td>Recursos Técnicos y Explotación</td></tr>
+                    <tr><td>202001</td><td>Unidad de Apoyo</td></tr>
+                    <tr><td>202002</td><td>Distribución y Logística</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     
     <script>
-        // Script (sin cambios)
+        // Obtener los elementos de las modales
         const mochilaModal = document.getElementById("mochilaModal");
         const renombrarModal = document.getElementById("renombrarModal");
+        const etiquetaModal = document.getElementById("etiquetaModal");
+
+        // Obtener los botones que abren las modales
         const mochilaBtn = document.getElementById("mochilaBtn");
         const renombrarBtn = document.getElementById("renombrarBtn");
+        const etiquetaBtn = document.getElementById("etiquetaBtn");
+
+        // Obtener los elementos <span> que cierran las modales
         const closeButtons = document.getElementsByClassName("close");
-        const openModal = (modal) => { modal.style.display = "block"; };
-        const closeModal = (modal) => { modal.style.display = "none"; };
+
+        // Función para abrir una modal
+        const openModal = (modal) => {
+            modal.style.display = "block";
+        };
+
+        // Función para cerrar una modal
+        const closeModal = (modal) => {
+            modal.style.display = "none";
+        };
+
+        // Asignar eventos a los botones de apertura
         mochilaBtn.onclick = () => openModal(mochilaModal);
         renombrarBtn.onclick = () => openModal(renombrarModal);
+        etiquetaBtn.onclick = () => openModal(etiquetaModal);
+
+        // Asignar eventos a los botones de cierre
         for (let i = 0; i < closeButtons.length; i++) {
-            closeButtons[i].onclick = function() { closeModal(this.parentElement.parentElement); }
+            closeButtons[i].onclick = function() {
+                closeModal(this.parentElement.parentElement);
+            }
         }
+
+        // Cerrar la modal si el usuario hace clic fuera del contenido
         window.onclick = function(event) {
             if (event.target == mochilaModal) { closeModal(mochilaModal); }
             if (event.target == renombrarModal) { closeModal(renombrarModal); }
+            if (event.target == etiquetaModal) { closeModal(etiquetaModal); }
         }
     </script>
 
