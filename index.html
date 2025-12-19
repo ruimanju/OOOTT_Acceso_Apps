@@ -138,6 +138,25 @@
         background-color: #f2f2f2;
         font-weight: bold;
     }
+    
+    /* --- Estilos para la tabla interactiva --- */
+    .interactive-table tbody tr {
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+    }
+    .interactive-table tbody tr:hover {
+        background-color: #e6f2ff; /* Azul muy claro al pasar el ratón */
+        color: #0056b3; /* Azul más oscuro para el texto */
+        font-weight: 500;
+    }
+    /* Indicación visual de que es un enlace */
+    .interactive-table tbody tr td:first-child {
+        text-decoration: underline; 
+        color: #007bff;
+    }
+    .interactive-table tbody tr:hover td:first-child {
+        color: #0056b3;
+    }
 
     /* --- REGLA RESPONSIVE PARA MÓVILES --- */
     @media (max-width: 600px) {
@@ -196,7 +215,6 @@
                 <span>Etiquetas de paso<br>a Producción</span>
             </a>
 
-            <!-- Nueva Aplicación Añadida: Códigos de barras -->
             <a href="https://ruimanju.github.io/Imprenta_BOE_Codigos_de_Barras/" target="_blank" class="app-item">
                 <div class="icon-wrapper">
                     <img src="img/codigo-de-barras.png" alt="Icono de Códigos de barras">
@@ -233,34 +251,28 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Generar etiquetas de paso a Producción</h2>
-            <p>Para generar una etiqueta de paso a Producción de forma rápida introducir en la barra de direcciones la siguiente estructura:</p>
-            <p style="font-family: monospace; background-color: #f0f0f0; padding: 10px; border-radius: 4px; word-break: break-all;">
-                https://intraboe.boe.es/cain/etiqueta_hr.php?hr=<span class="code-highlight">20XX-XXXX</span>&seccion=<span class="code-highlight">YYYYY</span>&tx_estado=
-            </p>
-            <ul>
-                <li>Sustituir <span class="code-highlight">20XX-XXXX</span> por la HR correspondiente.</li>
-                <li>Sustituir <span class="code-highlight">YYYYY</span> por el código de la Sección o Unidad correspondiente, según la siguiente tabla:</li>
-            </ul>
-            <table>
+            <p>Haz clic en la unidad correspondiente en la tabla. Se te solicitará el número de HR para generar la etiqueta automáticamente.</p>
+            
+            <table class="interactive-table">
                 <thead>
                     <tr>
                         <th>Código</th>
-                        <th>Unidad</th>
+                        <th>Unidad (Haz clic para lanzar la etiqueta)</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><td>20</td><td>Imprenta Nacional</td></tr>
-                    <tr><td>2010</td><td>Producción</td></tr>
-                    <tr><td>201001</td><td>Unidad de Tratamiento Digital de la Información</td></tr>
-                    <tr><td>201002</td><td>Preimpresión</td></tr>
-                    <tr><td>201003</td><td>Unidad de Producción Digital y Acabados</td></tr>
-                    <tr><td>201004</td><td>Digitalización</td></tr>
-                    <tr><td>201006</td><td>Unidad de Encuadernación Artesanal</td></tr>
-                    <tr><td>201010</td><td>Edición Electrónica</td></tr>
-                    <tr><td>201011</td><td>Producción Digital</td></tr>
-                    <tr><td>2020</td><td>Recursos Técnicos y Explotación</td></tr>
-                    <tr><td>202001</td><td>Unidad de Apoyo</td></tr>
-                    <tr><td>202002</td><td>Distribución y Logística</td></tr>
+                    <tr onclick="generarUrl('20', 'Imprenta Nacional')"><td>20</td><td>Imprenta Nacional</td></tr>
+                    <tr onclick="generarUrl('2010', 'Producción')"><td>2010</td><td>Producción</td></tr>
+                    <tr onclick="generarUrl('201001', 'Unidad de Tratamiento Digital de la Información')"><td>201001</td><td>Unidad de Tratamiento Digital de la Información</td></tr>
+                    <tr onclick="generarUrl('201002', 'Preimpresión')"><td>201002</td><td>Preimpresión</td></tr>
+                    <tr onclick="generarUrl('201003', 'Unidad de Producción Digital y Acabados')"><td>201003</td><td>Unidad de Producción Digital y Acabados</td></tr>
+                    <tr onclick="generarUrl('201004', 'Digitalización')"><td>201004</td><td>Digitalización</td></tr>
+                    <tr onclick="generarUrl('201006', 'Unidad de Encuadernación Artesanal')"><td>201006</td><td>Unidad de Encuadernación Artesanal</td></tr>
+                    <tr onclick="generarUrl('201010', 'Edición Electrónica')"><td>201010</td><td>Edición Electrónica</td></tr>
+                    <tr onclick="generarUrl('201011', 'Producción Digital')"><td>201011</td><td>Producción Digital</td></tr>
+                    <tr onclick="generarUrl('2020', 'Recursos Técnicos y Explotación')"><td>2020</td><td>Recursos Técnicos y Explotación</td></tr>
+                    <tr onclick="generarUrl('202001', 'Unidad de Apoyo')"><td>202001</td><td>Unidad de Apoyo</td></tr>
+                    <tr onclick="generarUrl('202002', 'Distribución y Logística')"><td>202002</td><td>Distribución y Logística</td></tr>
                 </tbody>
             </table>
         </div>
@@ -307,6 +319,30 @@
             if (event.target == mochilaModal) { closeModal(mochilaModal); }
             if (event.target == renombrarModal) { closeModal(renombrarModal); }
             if (event.target == etiquetaModal) { closeModal(etiquetaModal); }
+        }
+
+        // --- NUEVA FUNCIÓN PARA GENERAR ETIQUETAS ---
+        function generarUrl(codigo, nombreUnidad) {
+            // 1. Pedir al usuario el HR
+            let hr = prompt(`Introduce el número de HR que quieres enviar a "${nombreUnidad}" (Formato: XXXX-XXXX)`);
+
+            // Si el usuario da a cancelar (hr es null), no hacemos nada
+            if (hr === null) {
+                return; 
+            }
+
+            // 2. Validar el formato con Expresión Regular
+            // ^ = inicio, \d{4} = 4 dígitos exactos, - = guion, $ = fin
+            const regexHR = /^\d{4}-\d{4}$/;
+
+            if (regexHR.test(hr)) {
+                // 3. Si es válido, construir URL y abrir
+                const url = `https://intraboe.boe.es/cain/etiqueta_hr.php?hr=${hr}&seccion=${codigo}&tx_estado=`;
+                window.open(url, '_blank');
+            } else {
+                // 4. Si no es válido, mostrar error
+                alert("El número de HR introducido no es correcto.");
+            }
         }
     </script>
 
